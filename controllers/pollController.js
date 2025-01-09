@@ -67,6 +67,41 @@ exports.likePoll = async (req, res) => {
     }
 }
 
+// Vote on a poll
+exports.vote = async (req, res) => {
+    const { option } = req.body;
+    const pollId = req.params.id;
+    const userId = req.user._id;
+
+    try {
+        const poll = await PollController.Poll.findById(pollId);
+        if (!poll) {
+            return res.status(404).json({ message: 'Poll not found' });
+        }
+
+        if (!poll.options.includes(option)) {
+            return res.status(400).json({ message: 'Invalid option' });
+        }
+
+        // Check if user has already voted
+        const existingVote = await PollController.Vote.findOne({ poll: pollId, voter: userId });
+        if (existingVote) {
+            return res.status(400).json({ message: 'You have already voted on this poll' });
+        }
+
+        const vote = new PollController.Vote({ poll: pollId, option, voter: userId });
+        await vote.save();
+
+        // Update poll votes
+        poll.votes.push({ option, voter: userId });
+        await poll.save();
+
+        res.status(200).json({ message: 'Vote recorded' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 //get all liked polls
 exports.getLikedPolls = async (req, res) => {
     try {

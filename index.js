@@ -5,6 +5,12 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
+const pollRoutes = require('./routes/poll');
+const authRoutes = require('./routes/auth');
+
+app.use('/api/polls', pollRoutes);
+app.use('/api/auth', authRoutes);
+
 
 
 connectDB().then(() => {
