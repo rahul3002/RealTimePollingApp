@@ -1,5 +1,4 @@
-const PollController = require('./models/db');
-const likedPollController = require('./likedpoll');
+const { Poll } = require('../models/db');
 
 //create a new poll
 

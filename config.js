@@ -1,7 +1,10 @@
-const mongoose = require ("mongoose");
+const mongoose = require("mongoose");
 
 const connectDB = async () => {
-    await mongoose.connect("mongodb+srv://rahulbagal7171:8UQgwSQ5g6pYT84A@cluster0.ot6nw.mongodb.net/RealTimePollingApp");
-}
+  await mongoose.connect(process.env.MONGO_URI);
+};
 
-module.exports = connectDB;
+module.exports = {
+  connectDB,
+  jwtSecret: process.env.JWT_SECRET || "your-secret-key",
+};

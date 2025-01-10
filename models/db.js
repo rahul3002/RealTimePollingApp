@@ -9,19 +9,6 @@ const fieldSchema = new Schema({
   likedPolls: [{ type: Schema.Types.ObjectId, ref: "Poll" }],
 });
 
-const pollSchema = new Schema({
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    options: [{ type: String, required: true }],
-    votes: [{
-      option: { type: String, required: true },
-      voter: { type: Schema.Types.ObjectId, ref: 'User', required: true }
-    }],
-    createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    createdAt: { type: Date, default: Date.now },
-    likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
-  });
-
 const voteSchema = new Schema({
   poll: { type: Schema.Types.ObjectId, ref: "Poll", required: true },
   option: { type: String, required: true },
@@ -33,6 +20,14 @@ const commentSchema = new Schema({
   poll: { type: Schema.Types.ObjectId, ref: "Poll", required: true },
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   content: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+const pollSchema = new Schema({
+  title: { type: String, required: true },
+  description: { type: String },
+  options: [{ type: String, required: true }],
+  createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
